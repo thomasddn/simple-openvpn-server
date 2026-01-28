@@ -79,6 +79,12 @@ if [[ "$IP" = "" ]]; then
 fi
 
 
+apt-get clean
+rm -rf /var/lib/apt/lists/*
+mkdir -p /var/lib/apt/lists/partial
+apt-get update
+apt-get install -y software-properties-common
+add-apt-repository -y universe
 apt-get update
 apt-get install openvpn iptables openssl fcgiwrap ca-certificates certbot python3-certbot-nginx apache2-utils nginx -y
 
@@ -88,7 +94,7 @@ if [[ -d /etc/openvpn/easy-rsa/ ]]; then
 fi
 # Get easy-rsa
 
-wget -O ~/EasyRSA-${VERSION}.tgz "https://github.com/OpenVPN/easy-rsa/releases/download/3.0.1/EasyRSA-${VERSION}.tgz"
+wget -O ~/EasyRSA-${VERSION}.tgz "https://github.com/OpenVPN/easy-rsa/releases/download/v${VERSION}/EasyRSA-${VERSION}.tgz"
 tar xzf ~/EasyRSA-${VERSION}.tgz -C ~/
 mv ~/EasyRSA-${VERSION}/ /etc/openvpn/
 mv /etc/openvpn/EasyRSA-${VERSION}/ /etc/openvpn/easy-rsa/
