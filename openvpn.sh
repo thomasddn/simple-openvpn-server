@@ -135,6 +135,8 @@ echo "push \"dhcp-option DNS $DNS1\"" >> /etc/openvpn/server.conf
 echo "push \"dhcp-option DNS $DNS2\"" >> /etc/openvpn/server.conf
 echo "keepalive 10 120
 cipher AES-256-CBC
+data-ciphers AES-256-GCM:AES-128-GCM:CHACHA20-POLY1305:AES-256-CBC
+data-ciphers-fallback AES-256-CBC
 
 user nobody
 group $GROUPNAME
@@ -225,6 +227,8 @@ persist-key
 persist-tun
 remote-cert-tls server
 cipher AES-256-CBC
+data-ciphers AES-256-GCM:AES-128-GCM:CHACHA20-POLY1305:AES-256-CBC
+data-ciphers-fallback AES-256-CBC
 setenv opt block-outside-dns
 key-direction 1
 verb 3" > /etc/openvpn/client-common.txt
@@ -252,7 +256,7 @@ chmod g+s /etc/openvpn/easy-rsa/
 
 #Configure the web server with the lighttpd.conf from GitHub
 mv  /etc/nginx/sites-available/default /etc/nginx/sites-available/default.$$
-wget -O /etc/nginx/sites-available/default https://raw.githubusercontent.com/theonemule/simple-openvpn-server/master/default
+wget -O /etc/nginx/sites-available/default https://raw.githubusercontent.com/thomasddn/simple-openvpn-server/master/default
 
 sed -i "s/^[[:space:]]*server_name[[:space:]]*example.com;$/\tserver_name\t$HOST;/g" /etc/nginx/sites-available/default
 
@@ -260,9 +264,9 @@ sed -i "s/^[[:space:]]*server_name[[:space:]]*example.com;$/\tserver_name\t$HOST
 #install the webserver scripts
 rm /var/www/html/*
 mkdir -p /var/www/html/
-wget -O /var/www/html/index.sh https://raw.githubusercontent.com/theonemule/simple-openvpn-server/master/index.sh
+wget -O /var/www/html/index.sh https://raw.githubusercontent.com/thomasddn/simple-openvpn-server/master/index.sh
 
-wget -O /var/www/html/download.sh https://raw.githubusercontent.com/theonemule/simple-openvpn-server/master/download.sh
+wget -O /var/www/html/download.sh https://raw.githubusercontent.com/thomasddn/simple-openvpn-server/master/download.sh
 chown -R www-data:www-data /var/www/html/
 chmod +x /var/www/html/download.sh
 chmod +x /var/www/html/index.sh
